@@ -16,161 +16,283 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/display"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Calcuator" />
+            android:hint="Calculator"
+            android:text=""
+            android:textColorHint="@android:color/darker_gray"
+            android:textSize="48sp" />
 
         <TableLayout
             android:id="@+id/tableLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2">
+            android:background="#F1E8E8"
+            android:gravity="bottom"
+            android:paddingBottom="20dp">
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent"
+                android:gravity="center">
 
                 <Button
                     android:id="@+id/buttonAC"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="AC" />
+                    android:layout_width="70dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="#F1E8E8"
+                    android:text="AC"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:cornerRadius="50dp" />
 
                 <Button
                     android:id="@+id/buttonDelete"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="⌫" />
+                    android:layout_width="70dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="#F1E8E8"
+                    android:text="⌫"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:cornerRadius="50dp" />
 
                 <Button
                     android:id="@+id/buttonPercentage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="%" />
+                    android:layout_width="70dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="#F1E8E8"
+                    android:text="%"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:cornerRadius="50dp" />
 
                 <Button
                     android:id="@+id/buttonDivision"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="÷" />
+                    android:layout_width="70dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="#00313435"
+                    android:text="÷"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:cornerRadius="50dp" />
             </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent"
+                android:gravity="center">
 
                 <Button
                     android:id="@+id/button7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="7" />
+                    android:layout_width="70dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="#F1E8E8"
+                    android:onClick="onClick"
+                    android:text="7"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:cornerRadius="50dp" />
 
                 <Button
                     android:id="@+id/button8"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="8" />
+                    android:layout_width="70dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="#F1E8E8"
+                    android:onClick="onClick"
+                    android:text="8"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:cornerRadius="50dp" />
 
                 <Button
                     android:id="@+id/button9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="9" />
+                    android:layout_width="70dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="#F1E8E8"
+                    android:onClick="onClick"
+                    android:text="9"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:cornerRadius="50dp" />
 
                 <Button
                     android:id="@+id/buttonMultiply"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="x" />
+                    android:layout_width="70dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="#00313435"
+                    android:text="x"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:cornerRadius="50dp" />
             </TableRow>
 
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent"
+                android:gravity="center">
+
                 <Button
                     android:id="@+id/button4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="4" />
+                    android:layout_width="70dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="#F1E8E8"
+                    android:onClick="onClick"
+                    android:text="4"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:cornerRadius="50dp" />
 
                 <Button
                     android:id="@+id/button5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="5" />
+                    android:layout_width="70dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="#F1E8E8"
+                    android:onClick="onClick"
+                    android:text="5"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:cornerRadius="50dp" />
 
                 <Button
                     android:id="@+id/button6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="6" />
+                    android:layout_width="70dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="#F1E8E8"
+                    android:onClick="onClick"
+                    android:text="6"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:cornerRadius="50dp" />
 
                 <Button
                     android:id="@+id/buttonSubtract"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="-" />
+                    android:layout_width="70dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="#00313435"
+                    android:text="-"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:cornerRadius="50dp" />
             </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent"
+                android:gravity="center">
 
                 <Button
                     android:id="@+id/button1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="1" />
+                    android:layout_width="70dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="#F1E8E8"
+                    android:onClick="onClick"
+                    android:text="1"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:cornerRadius="50dp" />
 
                 <Button
                     android:id="@+id/button2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="2" />
+                    android:layout_width="70dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="#F1E8E8"
+                    android:onClick="onClick"
+                    android:text="2"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:cornerRadius="50dp" />
 
                 <Button
                     android:id="@+id/button3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="3" />
+                    android:layout_width="70dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="#F1E8E8"
+                    android:onClick="onClick"
+                    android:text="3"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:cornerRadius="50dp" />
 
                 <Button
                     android:id="@+id/buttonPlus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="+" />
+                    android:layout_width="70dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="#00313435"
+                    android:text="+"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:cornerRadius="50dp" />
             </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:onClick="onClick">
 
                 <Button
                     android:id="@+id/buttonOpt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="⊞" />
+                    android:layout_width="70dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="#F1E8E8"
+                    android:text="⊞"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:cornerRadius="50dp" />
 
                 <Button
                     android:id="@+id/button0"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="0" />
+                    android:layout_width="70dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="#F1E8E8"
+                    android:onClick="onClick"
+                    android:text="0"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:cornerRadius="50dp" />
 
                 <Button
                     android:id="@+id/buttonDot"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="." />
+                    android:layout_width="70dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="#F1E8E8"
+                    android:text="."
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    app:cornerRadius="50dp" />
 
                 <Button
                     android:id="@+id/buttonEqual"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="=" />
+                    android:layout_width="70dp"
+                    android:layout_height="80dp"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="#1048F4"
+                    android:text="="
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:cornerRadius="50dp" />
             </TableRow>
         </TableLayout>
 
