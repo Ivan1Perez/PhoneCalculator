@@ -1,6 +1,5 @@
 package es.ieslavereda.phonecalculator;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -11,8 +10,17 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
+    //Pagina web útil para diseño → https://m3.material.io/
     private TextView display;
-    private ActionButtons actionButtons;
+    private Button AC;
+    private Button delete;
+    private Button percentage;
+    private Button division;
+    private Button multiply;
+    private Button subtract;
+    private Button sum;
+    private Button equal;
+    private Operation operation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +28,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         display = findViewById(R.id.display);
-        actionButtons = new ActionButtons(display);
+        AC = findViewById(R.id.buttonAC);
+
+        inicializar();
 
         // Oculta la barra de navegación y la barra de estado
         View decorView = getWindow().getDecorView();
@@ -34,19 +44,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    private void inicializar(){
+
+    }
+
     @SuppressLint("SetTextI18n")
     @Override
     public void onClick(View view) {
 
-        if(!isActionButton(view)){
-            if (display.getText().equals("0") || display.getText().equals("."))
-                display.setText(((Button) view).getText());
-            else{
-                if(!dotClicked(view))
-                    display.setText(String.valueOf(display.getText()) + ((Button) view).getText());
-            }
-        }else
-            checkActionButton(view);
+        if (display.getText().equals("0") || display.getText().equals("."))
+            display.setText(((Button) view).getText());
+        else{
+            if(!dotClicked(view))
+                display.setText(String.valueOf(display.getText()) + ((Button) view).getText());
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -61,22 +72,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return false;
     }
 
-    public boolean isActionButton(View view){
-        actionButtons.setViewId(view.getId());
-
-        if(actionButtons.getActionButtons().containsKey(view.getId()))
-            return true;
-
-        return false;
-    }
-
-    public void checkActionButton(View view){
-        Runnable action = actionButtons.getActionButtons().get(view.getId());
-
-        if (action != null) {
-            action.run();
-            display.setText(actionButtons.getDisplayText());
-        }
-
-    }
 }
