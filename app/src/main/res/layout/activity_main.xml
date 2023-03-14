@@ -278,6 +278,7 @@
                     android:layout_height="80dp"
                     android:layout_margin="5dp"
                     android:backgroundTint="#F1E8E8"
+                    android:onClick="onClick"
                     android:text="."
                     android:textColor="@color/black"
                     android:textSize="16sp"
