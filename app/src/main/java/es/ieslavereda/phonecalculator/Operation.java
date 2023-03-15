@@ -25,7 +25,7 @@ import java.util.Map;
     }
 
      public static void clearDisplay() {
-
+         MainActivity.setDisplayText("");
     }
 
      public static void deleteChar() {

@@ -10,17 +10,18 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-    //Pagina web útil para diseño → https://m3.material.io/
-    private TextView display;
-    private Button AC;
-    private Button delete;
-    private Button percentage;
-    private Button division;
-    private Button multiply;
-    private Button subtract;
-    private Button sum;
-    private Button equal;
+    private static TextView display;
+    private Button buttonAC;
+    private Button buttonDelete;
+    private Button buttonPercentage;
+    private Button buttonDivision;
+    private Button buttonMultiply;
+    private Button buttonSubtract;
+    private Button buttonSum;
+    private Button buttonEqual;
     private Operation operation;
+    private Float operando1;
+    private static String displayText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +29,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         display = findViewById(R.id.display);
-        AC = findViewById(R.id.buttonAC);
+        buttonAC = findViewById(R.id.buttonAC);
+        buttonDelete = findViewById((R.id.buttonDelete));
+        buttonPercentage = findViewById(R.id.buttonPercentage);
+        buttonDivision = findViewById(R.id.buttonDivision);
+        buttonSubtract = findViewById(R.id.buttonSubtract);
+        buttonSum = findViewById(R.id.buttonPlus);
+        buttonEqual = findViewById(R.id.buttonEqual);
 
         inicializar();
 
@@ -45,6 +52,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void inicializar(){
+        int buttonID;
+
+            buttonAC.setOnClickListener(view -> {
+                display.setText(null);
+            });
+
+            buttonDelete.setOnClickListener(view -> {
+                CharSequence text = display.getText();
+                if (text.length() > 1) {
+                    display.setText(text.subSequence(0, text.length()-1));
+                }else
+                    display.setText(null);
+
+            });
+
+//            buttonSum.setOnClickListener(view -> {
+//                CharSequence text = display.getText();
+//                if(text==null || text)
+//            });
+
+
+//        buttonEqual.setOnClickListener(view -> {
+//            switch (view.getId()){
+//                case buttonAC.getId():
+//
+//            }
+//        });
 
     }
 
@@ -52,24 +86,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
 
-        if (display.getText().equals("0") || display.getText().equals("."))
-            display.setText(((Button) view).getText());
-        else{
-            if(!dotClicked(view))
-                display.setText(String.valueOf(display.getText()) + ((Button) view).getText());
+        if(display.getText().equals("0")) {
+            startsWithZero(view);
         }
+        else if (display.getText().toString().contains(".")){
+            containsDot(view);
+        }
+        else
+            display.setText(String.valueOf(display.getText()) + ((Button) view).getText());
+
     }
 
     @SuppressLint("SetTextI18n")
-    public boolean dotClicked(View view){
-
-        if (view.getId() == R.id.buttonDot) {
-            if (!display.getText().toString().contains("."))
-                display.append(((Button) view).getText());
-            return true;
-        }
-
-        return false;
+    public void startsWithZero(View view){
+        if (!(view.getId()==(R.id.buttonDot)))
+            display.setText(((Button) view).getText());
+        else
+            display.setText(String.valueOf(display.getText()) + ((Button) view).getText());
     }
 
+    @SuppressLint("SetTextI18n")
+    public void containsDot(View view){
+        if(view.getId()==(R.id.buttonDot))
+            display.getText();
+        else
+            display.setText(String.valueOf(display.getText()) + ((Button) view).getText());
+    }
+
+    public static String getDisplayText() {
+        return displayText = (String) display.getText();
+    }
+
+    public static void setDisplayText(String displayText) {
+        display.setText(displayText);
+    }
 }
