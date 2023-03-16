@@ -9,28 +9,17 @@ import java.util.Map;
 
  enum Operation {
 
-     CLEAR (Operation::clearDisplay),
-     DELETE (Operation::deleteChar),
      PERCENTAGE (Operation::calculatePercentage),
      DIVISION (Operation::performDivision),
      MULTIPLY (Operation::performMultiplication),
      SUBTRACT (Operation::performSubtraction),
-     SUM (Operation::performAddition),
-     EQUAL (Operation::performCalculation);
+     SUM (Operation::performAddition);
 
      private Runnable runnable;
 
      Operation(Runnable runnable){
          this.runnable = runnable;
     }
-
-     public static void clearDisplay() {
-         MainActivity.setDisplayText("");
-    }
-
-     public static void deleteChar() {
-         // Borra el último carácter
-     }
 
      public static void calculatePercentage() {
          // Calcula el porcentaje
@@ -50,10 +39,6 @@ import java.util.Map;
 
      public static void performAddition() {
          // Realiza la suma
-     }
-
-     public static void performCalculation() {
-         // Realiza el cálculo y muestra el resultado
      }
 
 

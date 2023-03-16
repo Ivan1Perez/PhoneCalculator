@@ -10,7 +10,8 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private static TextView display;
+    private TextView display;
+    private TextView secondaryDisplay;
     private Button buttonAC;
     private Button buttonDelete;
     private Button buttonPercentage;
@@ -21,7 +22,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button buttonEqual;
     private Operation operation;
     private Float operando1;
+    private Float operando2;
     private static String displayText;
+    private Button currentOperationButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         display = findViewById(R.id.display);
+        secondaryDisplay = findViewById(R.id.secondaryDisplay);
         buttonAC = findViewById(R.id.buttonAC);
         buttonDelete = findViewById((R.id.buttonDelete));
         buttonPercentage = findViewById(R.id.buttonPercentage);
@@ -51,34 +55,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    @SuppressLint("SetTextI18n")
     private void inicializar(){
-        int buttonID;
 
-            buttonAC.setOnClickListener(view -> {
+        buttonAC.setOnClickListener(view -> {
+            display.setText(null);
+        });
+
+        buttonDelete.setOnClickListener(view -> {
+            CharSequence text = display.getText();
+            if (text.length() > 1) {
+                display.setText(text.subSequence(0, text.length()-1));
+            }else
                 display.setText(null);
-            });
 
-            buttonDelete.setOnClickListener(view -> {
-                CharSequence text = display.getText();
-                if (text.length() > 1) {
-                    display.setText(text.subSequence(0, text.length()-1));
-                }else
-                    display.setText(null);
+        });
 
-            });
+        buttonSum.setOnClickListener(view -> {
+            currentOperationButton = findViewById(view.getId());
+            buttonSum.setActivated(true);
 
-//            buttonSum.setOnClickListener(view -> {
-//                CharSequence text = display.getText();
-//                if(text==null || text)
-//            });
+            //Check if it is necessary to add the operation button or if it has already been added.
+            containsOperationButton(buttonSum);
+            operando1 = Float.parseFloat(display.getText().subSequence(0, display.getText().length()-1).toString());
+            operation = Operation.SUM;
+        });
 
+        buttonEqual.setOnClickListener(view -> {
 
-//        buttonEqual.setOnClickListener(view -> {
-//            switch (view.getId()){
-//                case buttonAC.getId():
-//
-//            }
-//        });
+        });
 
     }
 
@@ -95,11 +100,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else
             display.setText(String.valueOf(display.getText()) + ((Button) view).getText());
 
+        autoCalculate();
     }
 
     @SuppressLint("SetTextI18n")
     public void startsWithZero(View view){
-        if (!(view.getId()==(R.id.buttonDot)))
+        if (view.getId()!=(R.id.buttonDot))
             display.setText(((Button) view).getText());
         else
             display.setText(String.valueOf(display.getText()) + ((Button) view).getText());
@@ -107,17 +113,60 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @SuppressLint("SetTextI18n")
     public void containsDot(View view){
-        if(view.getId()==(R.id.buttonDot))
-            display.getText();
-        else
+        if(view.getId()!=(R.id.buttonDot))
             display.setText(String.valueOf(display.getText()) + ((Button) view).getText());
     }
 
-    public static String getDisplayText() {
-        return displayText = (String) display.getText();
+    @SuppressLint("SetTextI18n")
+    public void autoCalculate(){
+
+
+        if(operation!= null) {
+            switch (operation) {
+                case SUM:
+                    setOperando2(currentOperationButton);
+                    if(operando2!=null){
+                        secondaryDisplay.setText(String.valueOf(operando1 + operando2));
+                    }
+
+//                        display.setText(String.valueOf(operando1 + operando2));
+                    buttonSum.setActivated(false);
+                    break;
+
+            }
+            operando2 = null;
+        }
+
     }
 
-    public static void setDisplayText(String displayText) {
-        display.setText(displayText);
+    public void setOperando2(Button operationButton){
+        String displayText = display.getText().toString();
+        int position = displayText.indexOf(operationButton.getText().toString());
+        if(operationButton.isActivated())
+            try{
+                operando2 = Float.parseFloat(String.valueOf(display.getText().subSequence(position, displayText.length())));
+            }catch (Exception e){
+                operando2 = null;
+            }
+        else
+            operando2 = null;
     }
+
+    @SuppressLint("SetTextI18n")
+    public void containsOperationButton(Button operationButton){
+        if(!(display.getText().toString().contains(operationButton.getText()))) {
+            display.setText(String.valueOf(display.getText()) + (operationButton.getText()));
+        }
+
+    }
+
+//    public boolean containsOperation(View view){
+//        Button operationButton = findViewById(view.getId());
+//
+//        if(operationButton.isActivated())
+//            return true;
+//
+//        return false;
+//    }
+
 }

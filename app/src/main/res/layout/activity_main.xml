@@ -15,20 +15,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/display"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="Calculator"
-            android:text=""
-            android:textColorHint="@android:color/darker_gray"
-            android:textSize="48sp" />
+            android:layout_weight="2"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/display"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:hint="Calculator"
+                android:text=""
+                android:textColorHint="@android:color/darker_gray"
+                android:textSize="48sp" />
+
+            <TextView
+                android:id="@+id/secondaryDisplay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:text="" />
+
+        </LinearLayout>
 
         <TableLayout
             android:id="@+id/tableLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="0"
             android:background="#F1E8E8"
             android:gravity="bottom"
             android:paddingBottom="20dp">
@@ -46,7 +62,7 @@
                     android:backgroundTint="#F1E8E8"
                     android:text="AC"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="22sp"
                     app:cornerRadius="50dp" />
 
                 <Button
@@ -57,7 +73,7 @@
                     android:backgroundTint="#F1E8E8"
                     android:text="⌫"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="24sp"
                     app:cornerRadius="50dp" />
 
                 <Button
@@ -68,7 +84,7 @@
                     android:backgroundTint="#F1E8E8"
                     android:text="%"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="24sp"
                     app:cornerRadius="50dp" />
 
                 <Button
@@ -79,7 +95,7 @@
                     android:backgroundTint="#00313435"
                     android:text="÷"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="34sp"
                     app:cornerRadius="50dp" />
             </TableRow>
 
@@ -97,7 +113,7 @@
                     android:onClick="onClick"
                     android:text="7"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="24sp"
                     app:cornerRadius="50dp" />
 
                 <Button
@@ -109,7 +125,7 @@
                     android:onClick="onClick"
                     android:text="8"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="24sp"
                     app:cornerRadius="50dp" />
 
                 <Button
@@ -121,7 +137,7 @@
                     android:onClick="onClick"
                     android:text="9"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="24sp"
                     app:cornerRadius="50dp" />
 
                 <Button
@@ -130,9 +146,9 @@
                     android:layout_height="80dp"
                     android:layout_margin="5dp"
                     android:backgroundTint="#00313435"
-                    android:text="x"
+                    android:text="×"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="34sp"
                     app:cornerRadius="50dp" />
             </TableRow>
 
@@ -151,7 +167,7 @@
                     android:onClick="onClick"
                     android:text="4"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="24sp"
                     app:cornerRadius="50dp" />
 
                 <Button
@@ -163,7 +179,7 @@
                     android:onClick="onClick"
                     android:text="5"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="24sp"
                     app:cornerRadius="50dp" />
 
                 <Button
@@ -175,7 +191,7 @@
                     android:onClick="onClick"
                     android:text="6"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="24sp"
                     app:cornerRadius="50dp" />
 
                 <Button
@@ -186,7 +202,7 @@
                     android:backgroundTint="#00313435"
                     android:text="-"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="34sp"
                     app:cornerRadius="50dp" />
             </TableRow>
 
@@ -204,7 +220,7 @@
                     android:onClick="onClick"
                     android:text="1"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="24sp"
                     app:cornerRadius="50dp" />
 
                 <Button
@@ -216,7 +232,7 @@
                     android:onClick="onClick"
                     android:text="2"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="24sp"
                     app:cornerRadius="50dp" />
 
                 <Button
@@ -228,7 +244,7 @@
                     android:onClick="onClick"
                     android:text="3"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="24sp"
                     app:cornerRadius="50dp" />
 
                 <Button
@@ -237,9 +253,10 @@
                     android:layout_height="80dp"
                     android:layout_margin="5dp"
                     android:backgroundTint="#00313435"
+                    android:onClick="onClick"
                     android:text="+"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="34sp"
                     app:cornerRadius="50dp" />
             </TableRow>
 
@@ -257,7 +274,7 @@
                     android:backgroundTint="#F1E8E8"
                     android:text="⊞"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="24sp"
                     app:cornerRadius="50dp" />
 
                 <Button
@@ -269,7 +286,7 @@
                     android:onClick="onClick"
                     android:text="0"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="24sp"
                     app:cornerRadius="50dp" />
 
                 <Button
@@ -281,7 +298,7 @@
                     android:onClick="onClick"
                     android:text="."
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="24sp"
                     app:cornerRadius="50dp" />
 
                 <Button
@@ -292,7 +309,7 @@
                     android:backgroundTint="#1048F4"
                     android:text="="
                     android:textColor="@color/white"
-                    android:textSize="16sp"
+                    android:textSize="34sp"
                     app:cornerRadius="50dp" />
             </TableRow>
         </TableLayout>
