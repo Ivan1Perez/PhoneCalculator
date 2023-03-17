@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Float operando2;
     private static String displayText;
     private Button currentOperationButton;
+    private Float result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,16 +74,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         buttonSum.setOnClickListener(view -> {
             currentOperationButton = findViewById(view.getId());
-            buttonSum.setActivated(true);
 
             //Check if it is necessary to add the operation button or if it has already been added.
-            containsOperationButton(buttonSum);
+            checkOperationButton(buttonSum);
             operando1 = Float.parseFloat(display.getText().subSequence(0, display.getText().length()-1).toString());
             operation = Operation.SUM;
         });
 
         buttonEqual.setOnClickListener(view -> {
-
+            calculate(true);
         });
 
     }
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else
             display.setText(String.valueOf(display.getText()) + ((Button) view).getText());
 
-        autoCalculate();
+        calculate(false);
     }
 
     @SuppressLint("SetTextI18n")
@@ -118,19 +118,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @SuppressLint("SetTextI18n")
-    public void autoCalculate(){
-
+    public void calculate(boolean equalPressed){
 
         if(operation!= null) {
             switch (operation) {
                 case SUM:
                     setOperando2(currentOperationButton);
                     if(operando2!=null){
-                        secondaryDisplay.setText(String.valueOf(operando1 + operando2));
+                        result = operando1 + operando2;
+                        secondaryDisplay.setText(String.valueOf(result));
+                        if(equalPressed){
+                            display.setText(String.valueOf(result));
+                            secondaryDisplay.setText("");
+                        }
                     }
-
-//                        display.setText(String.valueOf(operando1 + operando2));
-                    buttonSum.setActivated(false);
                     break;
 
             }
@@ -141,22 +142,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void setOperando2(Button operationButton){
         String displayText = display.getText().toString();
-        int position = displayText.indexOf(operationButton.getText().toString());
-        if(operationButton.isActivated())
-            try{
-                operando2 = Float.parseFloat(String.valueOf(display.getText().subSequence(position, displayText.length())));
-            }catch (Exception e){
-                operando2 = null;
-            }
-        else
+        int position;
+        try{
+            position = displayText.indexOf(operationButton.getText().toString());
+            operando2 = Float.parseFloat(String.valueOf(display.getText().subSequence(position, displayText.length())));
+        }catch (Exception e){
             operando2 = null;
+        }
     }
 
     @SuppressLint("SetTextI18n")
-    public void containsOperationButton(Button operationButton){
-        if(!(display.getText().toString().contains(operationButton.getText()))) {
-            display.setText(String.valueOf(display.getText()) + (operationButton.getText()));
+    public void checkOperationButton(Button operationButton){
+        boolean containsOperationButton;
+
+        try {
+            containsOperationButton = display.getText().toString().contains(operationButton.getText());
+        }catch (Exception e) {
+            containsOperationButton = false;
         }
+
 
     }
 
