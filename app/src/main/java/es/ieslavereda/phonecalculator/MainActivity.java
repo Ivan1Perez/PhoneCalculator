@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @SuppressLint("SetTextI18n")
     public void checkOperationButton(Button operationButton){
         boolean containsOperationButton = display.getText().toString().contains(operationButton.getText());
-        int lastCharPosition = display.getText().length()-1;
+//        int lastCharPosition = display.getText().length()-1;
 
         if (containsOperationButton){
 //            try {
