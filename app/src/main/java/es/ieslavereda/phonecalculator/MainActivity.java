@@ -23,9 +23,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Operation operation;
     private Float operando1;
     private Float operando2;
-    private static String displayText;
     private Button currentOperationButton;
     private Float result;
+    private boolean equalPressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonSubtract = findViewById(R.id.buttonSubtract);
         buttonSum = findViewById(R.id.buttonPlus);
         buttonEqual = findViewById(R.id.buttonEqual);
+        equalPressed = false;
 
         inicializar();
 
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         buttonAC.setOnClickListener(view -> {
             display.setText(null);
+            secondaryDisplay.setText("");
         });
 
         buttonDelete.setOnClickListener(view -> {
@@ -73,15 +75,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         buttonSum.setOnClickListener(view -> {
+            equalPressed = false;
             currentOperationButton = findViewById(view.getId());
+            String displayText = display.getText().toString();
+            int lastCharPosition = display.getText().length()-1;
+
+            if(!(displayText.charAt(lastCharPosition)==currentOperationButton.getText().charAt(0)))
+                display.setText(String.valueOf(display.getText()) + currentOperationButton.getText());
 
             //Check if it is necessary to add the operation button or if it has already been added.
-            checkOperationButton(buttonSum);
-            operando1 = Float.parseFloat(display.getText().subSequence(0, display.getText().length()-1).toString());
+//            checkOperationButton(buttonSum);
+            if(result==null)
+                operando1 = Float.parseFloat(display.getText().subSequence(0, display.getText().length()-1).toString());
+            else
+                operando1 = result;
             operation = Operation.SUM;
         });
 
         buttonEqual.setOnClickListener(view -> {
+            equalPressed = true;
             calculate(true);
         });
 
@@ -90,6 +102,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @SuppressLint("SetTextI18n")
     @Override
     public void onClick(View view) {
+        if(equalPressed){
+            display.setText("");
+            secondaryDisplay.setText("");
+        }
 
         if(display.getText().equals("0")) {
             startsWithZero(view);
@@ -120,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @SuppressLint("SetTextI18n")
     public void calculate(boolean equalPressed){
 
-        if(operation!= null) {
+        if(operation!=null) {
             switch (operation) {
                 case SUM:
                     setOperando2(currentOperationButton);
@@ -140,40 +156,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    @SuppressLint("SetTextI18n")
     public void setOperando2(Button operationButton){
         String displayText = display.getText().toString();
         int position;
+
         try{
-            position = displayText.indexOf(operationButton.getText().toString());
+            position = displayText.lastIndexOf(operationButton.getText().toString());
             operando2 = Float.parseFloat(String.valueOf(display.getText().subSequence(position, displayText.length())));
         }catch (Exception e){
             operando2 = null;
         }
-    }
-
-    @SuppressLint("SetTextI18n")
-    public void checkOperationButton(Button operationButton){
-        boolean containsOperationButton = display.getText().toString().contains(operationButton.getText());
-//        int lastCharPosition = display.getText().length()-1;
-
-        if (containsOperationButton){
-//            try {
-//                lastCharPosition = display.getText().subSequence(lastCharPosition-1, lastCharPosition)
-//            }catch ()
-        }else{
-            display.setText(String.valueOf(display.getText()) + operationButton.getText());
-        }
-
 
     }
-
-//    public boolean containsOperation(View view){
-//        Button operationButton = findViewById(view.getId());
-//
-//        if(operationButton.isActivated())
-//            return true;
-//
-//        return false;
-//    }
 
 }

@@ -253,7 +253,6 @@
                     android:layout_height="80dp"
                     android:layout_margin="5dp"
                     android:backgroundTint="#00313435"
-                    android:onClick="onClick"
                     android:text="+"
                     android:textColor="@color/black"
                     android:textSize="34sp"
