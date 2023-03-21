@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button currentOperationButton;
     private Float result;
     private boolean equalPressed;
+    private boolean operationDone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonSum = findViewById(R.id.buttonPlus);
         buttonEqual = findViewById(R.id.buttonEqual);
         equalPressed = false;
+        operationDone = false;
 
         inicializar();
 
@@ -63,37 +65,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonAC.setOnClickListener(view -> {
             display.setText(null);
             secondaryDisplay.setText("");
+            result = null;
         });
 
         buttonDelete.setOnClickListener(view -> {
             CharSequence text = display.getText();
+//            result = null;
+//            calculate(false);
+
             if (text.length() > 1) {
                 display.setText(text.subSequence(0, text.length()-1));
-            }else
+//                secondaryDisplay.setText(text.subSequence(0, text.length()-1));
+            }else{
                 display.setText(null);
+                secondaryDisplay.setText(null);
+            }
+
 
         });
 
         buttonSum.setOnClickListener(view -> {
             equalPressed = false;
             currentOperationButton = findViewById(view.getId());
-            String displayText = display.getText().toString();
-            int lastCharPosition = display.getText().length()-1;
+            String displayText;
+            int lastCharPosition;
 
-            if(!(displayText.charAt(lastCharPosition)==currentOperationButton.getText().charAt(0)))
-                display.setText(String.valueOf(display.getText()) + currentOperationButton.getText());
+            if(display.getText().length()>0) {
+                 displayText = display.getText().toString();
+                lastCharPosition = display.getText().length()-1;
+                if (!(displayText.charAt(lastCharPosition) == currentOperationButton.getText().charAt(0)))
+                    display.setText(String.valueOf(display.getText()) + currentOperationButton.getText());
+            }
 
-            //Check if it is necessary to add the operation button or if it has already been added.
-//            checkOperationButton(buttonSum);
-            if(result==null)
-                operando1 = Float.parseFloat(display.getText().subSequence(0, display.getText().length()-1).toString());
-            else
+//            if(result==null)
+//                operando1 = Float.parseFloat(display.getText().subSequence(0, display.getText().length()-1).toString());
+//            else
                 operando1 = result;
+
             operation = Operation.SUM;
         });
 
         buttonEqual.setOnClickListener(view -> {
             equalPressed = true;
+            operationDone = false;
             calculate(true);
         });
 
@@ -102,9 +116,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @SuppressLint("SetTextI18n")
     @Override
     public void onClick(View view) {
-        if(equalPressed){
+        if(equalPressed && operationDone){
             display.setText("");
             secondaryDisplay.setText("");
+            equalPressed = false;
+            result = null;
         }
 
         if(display.getText().equals("0")) {
@@ -116,7 +132,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else
             display.setText(String.valueOf(display.getText()) + ((Button) view).getText());
 
-        calculate(false);
+//        calculate(false);
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -146,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if(equalPressed){
                             display.setText(String.valueOf(result));
                             secondaryDisplay.setText("");
+                            operationDone = true;
                         }
                     }
                     break;
