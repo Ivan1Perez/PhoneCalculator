@@ -8,6 +8,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private TextView display;
@@ -21,12 +24,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button buttonSum;
     private Button buttonEqual;
     private Operation operation;
-    private Float operando1;
-    private Float operando2;
-    private Button currentOperationButton;
-    private Float result;
+    private float operando1;
+    private float operando2;
+    private float result;
     private boolean equalPressed;
     private boolean operationDone;
+    private float previousResult;
+    private boolean firstCalculation;
+    private List<Float> results;
+    private boolean operationButtonPressed;
+    private int resultToShow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,18 +50,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonSum = findViewById(R.id.buttonPlus);
         buttonEqual = findViewById(R.id.buttonEqual);
         equalPressed = false;
-        operationDone = false;
+        results = new ArrayList<>();
+        operationButtonPressed = false;
+        resultToShow = 1;
 
         inicializar();
 
-        // Oculta la barra de navegación y la barra de estado
+        // Oculta la barra de navegación
         View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN);
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
-        // Detecta la interacción del usuario y vuelve a mostrar la barra de navegación y la barra de estado
+        // Detecta la interacción del usuario y vuelve a mostrar la barra de navegación
         decorView.setOnSystemUiVisibilityChangeListener(visibility -> {
             if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
-                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN);
+                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
             }
         });
     }
@@ -62,53 +71,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @SuppressLint("SetTextI18n")
     private void inicializar(){
 
-        buttonAC.setOnClickListener(view -> {
-            display.setText(null);
-            secondaryDisplay.setText("");
-            result = null;
-        });
-
-        buttonDelete.setOnClickListener(view -> {
-            CharSequence text = display.getText();
-//            result = null;
-//            calculate(false);
-
-            if (text.length() > 1) {
-                display.setText(text.subSequence(0, text.length()-1));
+//        buttonAC.setOnClickListener(view -> {
+//            display.setText(null);
+//            secondaryDisplay.setText("");
+//            result = 0;
+//            previousResult = 0;
+//        });
+//
+//        buttonDelete.setOnClickListener(view -> {
+//            CharSequence text = display.getText();
+//            result = 0;
+//
+//            if (text.length() > 1) {
+//                display.setText(text.subSequence(0, text.length()-1));
 //                secondaryDisplay.setText(text.subSequence(0, text.length()-1));
-            }else{
-                display.setText(null);
-                secondaryDisplay.setText(null);
-            }
-
-
-        });
+//            }else{
+//                display.setText(null);
+//                secondaryDisplay.setText(null);
+//            }
+//            calculate(false);
+//
+//
+//        });
 
         buttonSum.setOnClickListener(view -> {
-            equalPressed = false;
-            currentOperationButton = findViewById(view.getId());
-            String displayText;
-            int lastCharPosition;
 
-            if(display.getText().length()>0) {
-                 displayText = display.getText().toString();
-                lastCharPosition = display.getText().length()-1;
-                if (!(displayText.charAt(lastCharPosition) == currentOperationButton.getText().charAt(0)))
-                    display.setText(String.valueOf(display.getText()) + currentOperationButton.getText());
-            }
-
-//            if(result==null)
-//                operando1 = Float.parseFloat(display.getText().subSequence(0, display.getText().length()-1).toString());
-//            else
-                operando1 = result;
+            if (!(String.valueOf(display.getText().charAt(display.getText().length()-1)).equals(((Button) view).getText().toString())))
+                display.setText(display.getText() + ((Button) view).getText().toString());
 
             operation = Operation.SUM;
+            operationButtonPressed = true;
         });
 
         buttonEqual.setOnClickListener(view -> {
-            equalPressed = true;
-            operationDone = false;
-            calculate(true);
+            display.setText(String.valueOf(result));
+            secondaryDisplay.setText("");
+            operation = null;
         });
 
     }
@@ -116,12 +114,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @SuppressLint("SetTextI18n")
     @Override
     public void onClick(View view) {
-        if(equalPressed && operationDone){
-            display.setText("");
-            secondaryDisplay.setText("");
-            equalPressed = false;
-            result = null;
-        }
 
         if(display.getText().equals("0")) {
             startsWithZero(view);
@@ -132,7 +124,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else
             display.setText(String.valueOf(display.getText()) + ((Button) view).getText());
 
-//        calculate(false);
+        if(operation!=null){
+            calculate();
+        }
 
     }
 
@@ -146,46 +140,58 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @SuppressLint("SetTextI18n")
     public void containsDot(View view){
-        if(view.getId()!=(R.id.buttonDot))
-            display.setText(String.valueOf(display.getText()) + ((Button) view).getText());
-    }
-
-    @SuppressLint("SetTextI18n")
-    public void calculate(boolean equalPressed){
-
-        if(operation!=null) {
-            switch (operation) {
-                case SUM:
-                    setOperando2(currentOperationButton);
-                    if(operando2!=null){
-                        result = operando1 + operando2;
-                        secondaryDisplay.setText(String.valueOf(result));
-                        if(equalPressed){
-                            display.setText(String.valueOf(result));
-                            secondaryDisplay.setText("");
-                            operationDone = true;
-                        }
-                    }
-                    break;
-
-            }
-            operando2 = null;
+        try{
+            if(view.getId()!=R.id.buttonDot)
+                display.setText(String.valueOf(display.getText()) + ((Button) view).getText());
+        }catch (Exception e){
+            System.out.println("Problemaaaaaaaa");
         }
 
     }
 
     @SuppressLint("SetTextI18n")
-    public void setOperando2(Button operationButton){
+    public void getOperando1(){
         String displayText = display.getText().toString();
-        int position;
+
+        if(!displayText.equals("."))
+            operando1 = Float.parseFloat(displayText.substring(0, displayText.indexOf(operation.getSymbol())));
+    }
+
+    @SuppressLint("SetTextI18n")
+    public void getOperando2(){
+        String displayText = display.getText().toString();
 
         try{
-            position = displayText.lastIndexOf(operationButton.getText().toString());
-            operando2 = Float.parseFloat(String.valueOf(display.getText().subSequence(position, displayText.length())));
+            operando2 = Float.parseFloat(displayText.substring(displayText.lastIndexOf(operation.getSymbol())));
         }catch (Exception e){
-            operando2 = null;
+            operando2 = 0;
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    public void calculate(){
+        getOperando2();
+
+        switch (operation){
+            case SUM:
+                if(results.size()==0){
+                    result += operando2;
+                    results.add(result);
+                }else{
+                    if(!operationButtonPressed){
+                        result = results.get(results.size()-1) + operando2;
+                        results.add(result);
+                    }
+
+                }
+
+                break;
         }
 
+        secondaryDisplay.setText(String.valueOf(results.get(resultToShow)));
+        operationButtonPressed = false;
+
     }
+
 
 }

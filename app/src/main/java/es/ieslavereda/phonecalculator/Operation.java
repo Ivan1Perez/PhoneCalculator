@@ -9,10 +9,19 @@ import java.util.Map;
 
  enum Operation {
 
-     PERCENTAGE,
-     DIVISION,
-     MULTIPLY,
-     SUBTRACT,
-     SUM;
+     PERCENTAGE("%"),
+     DIVISION("/"),
+     MULTIPLY("*"),
+     SUBTRACT("-"),
+     SUM("+");
 
+     private String symbol;
+
+     Operation(String symbol){
+         this.symbol = symbol;
+     }
+
+     public String getSymbol() {
+         return symbol;
+     }
  }
