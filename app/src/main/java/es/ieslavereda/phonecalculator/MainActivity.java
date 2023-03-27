@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (operation != null) {
             calculate();
+            secondaryDisplay.setText(String.valueOf(result));
         }
 
     }
@@ -177,51 +178,62 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         boolean operatorACompleted = false;
         double a = 0, b = 0;
         int operandoCounter = 0;
-//
-//        if(secondaryDisplay.getText()==null || secondaryDisplay.getText().equals("")){
-//            expresion = display.getText().toString();
-//        }else {
-//            expresion = secondaryDisplay.getText().toString();
-//        }
+        boolean resultUpdated = false;
+        int i = 0;
 
-        for (int i = 0; i < expresion.length(); i++) {
-            if (expresion.charAt(i) >= '0' && expresion.charAt(i) <= '9') {
-                if(operando.equals("")){
-                    numStringA += expresion.charAt(i);
-                }else{
-                    numStringB += expresion.charAt(i);
-                }
-            }else{
-                operando = operation.getSymbol();
-            }
-        }
-
-        if(!operando.equals("")){
-            a = Double.parseDouble(numStringA);
-            b = Double.parseDouble(numStringB);
-
-            switch (operando) {
-                case "+":
-                    result = (a + b);
-                    break;
-                case "-":
-                    result = (a - b);
-                    break;
-                case "/":
-                    if(b!=0){
-                        result = (a / b);
+        if(result!=0){
+            a = Double.parseDouble(secondaryDisplay.getText().toString());
+            b = Double.parseDouble(expresion.substring(expresion.lastIndexOf(operation.getSymbol())));
+            operation(operation.getSymbol(), a , b);
+        }else{
+            while (i < expresion.length()) {
+                if (expresion.charAt(i) >= '0' && expresion.charAt(i) <= '9') {
+                    if(operando.equals("")){
+                        numStringA += expresion.charAt(i);
+                    }else{
+                        numStringB += expresion.charAt(i);
                     }
-                    break;
-                case "%":
-                    result = (a % b);
-                    break;
-                case "*":
-                    result = (a * b);
-                    break;
+                }else{
+                    operando = operation.getSymbol();
+                }
+
+                if(!operando.equals("")){
+                    if (numStringB.equals("")) {
+                        i++;
+                        continue;
+                    }
+
+                    a = Double.parseDouble(numStringA);
+                    b = Double.parseDouble(numStringB);
+
+                    operation(operando, a, b);
+                }
+                i++;
             }
-            secondaryDisplay.setText(String.valueOf(result));
         }
 
+    }
+
+    private void operation(String operando, double a, double b) {
+        switch (operando) {
+            case "+":
+                result = (a + b);
+                break;
+            case "-":
+                result = (a - b);
+                break;
+            case "/":
+                if(b !=0){
+                    result = (a / b);
+                }
+                break;
+            case "%":
+                result = (a % b);
+                break;
+            case "*":
+                result = (a * b);
+                break;
+        }
     }
 
 }
