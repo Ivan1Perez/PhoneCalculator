@@ -11,7 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView display;
     private TextView secondaryDisplay;
@@ -24,16 +24,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button buttonSum;
     private Button buttonEqual;
     private Operation operation;
-    private float operando1;
-    private float operando2;
-    private float result;
+    private double operando1;
+    private double operando2;
+    private double result;
     private boolean equalPressed;
     private boolean operationDone;
-    private float previousResult;
+    private double previousResult;
     private boolean firstCalculation;
     private List<Float> results;
     private boolean operationButtonPressed;
-    private int resultToShow;
+    private int totalOperadores;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         equalPressed = false;
         results = new ArrayList<>();
         operationButtonPressed = false;
-        resultToShow = 1;
+        totalOperadores = 0;
 
         inicializar();
 
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @SuppressLint("SetTextI18n")
-    private void inicializar(){
+    private void inicializar() {
 
 //        buttonAC.setOnClickListener(view -> {
 //            display.setText(null);
@@ -96,18 +96,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         buttonSum.setOnClickListener(view -> {
 
-            if (!(String.valueOf(display.getText().charAt(display.getText().length()-1)).equals(((Button) view).getText().toString())))
-                display.setText(display.getText() + ((Button) view).getText().toString());
+            if (display.getText().length() > 0)
+                if (!(String.valueOf(display.getText().charAt(display.getText().length() - 1)).equals(((Button) view).getText().toString())))
+                    display.setText(display.getText() + ((Button) view).getText().toString());
 
             operation = Operation.SUM;
             operationButtonPressed = true;
         });
 
         buttonEqual.setOnClickListener(view -> {
-            display.setText(String.valueOf(result));
-            secondaryDisplay.setText("");
+            display.setText("");
+            equalPressed = true;
             operation = null;
         });
+
 
     }
 
@@ -115,83 +117,111 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
 
-        if(display.getText().equals("0")) {
+        if (display.getText().equals("0")) {
             startsWithZero(view);
-        }
-        else if (display.getText().toString().contains(".")){
+        } else if (display.getText().toString().contains(".")) {
             containsDot(view);
-        }
-        else
+        } else
             display.setText(String.valueOf(display.getText()) + ((Button) view).getText());
 
-        if(operation!=null){
+        if (operation != null) {
             calculate();
         }
 
     }
 
     @SuppressLint("SetTextI18n")
-    public void startsWithZero(View view){
-        if (view.getId()!=(R.id.buttonDot))
+    public void startsWithZero(View view) {
+        if (view.getId() != (R.id.buttonDot))
             display.setText(((Button) view).getText());
         else
             display.setText(String.valueOf(display.getText()) + ((Button) view).getText());
     }
 
     @SuppressLint("SetTextI18n")
-    public void containsDot(View view){
-        try{
-            if(view.getId()!=R.id.buttonDot)
+    public void containsDot(View view) {
+        try {
+            if (view.getId() != R.id.buttonDot)
                 display.setText(String.valueOf(display.getText()) + ((Button) view).getText());
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Problemaaaaaaaa");
         }
 
     }
 
     @SuppressLint("SetTextI18n")
-    public void getOperando1(){
+    public void getOperando1() {
         String displayText = display.getText().toString();
 
-        if(!displayText.equals("."))
+        if (!displayText.equals("."))
             operando1 = Float.parseFloat(displayText.substring(0, displayText.indexOf(operation.getSymbol())));
     }
 
     @SuppressLint("SetTextI18n")
-    public void getOperando2(){
+    public void getOperando2() {
         String displayText = display.getText().toString();
 
-        try{
+        try {
             operando2 = Float.parseFloat(displayText.substring(displayText.lastIndexOf(operation.getSymbol())));
-        }catch (Exception e){
+        } catch (Exception e) {
             operando2 = 0;
         }
     }
 
     @SuppressLint("SetTextI18n")
-    public void calculate(){
-        getOperando2();
+    public void calculate() {
+        String expresion = display.getText().toString();
+        char character = ' ';
+        String operando = "";
+        String numStringA = "", numStringB = "";
+        boolean operatorACompleted = false;
+        double a = 0, b = 0;
+        int operandoCounter = 0;
+//
+//        if(secondaryDisplay.getText()==null || secondaryDisplay.getText().equals("")){
+//            expresion = display.getText().toString();
+//        }else {
+//            expresion = secondaryDisplay.getText().toString();
+//        }
 
-        switch (operation){
-            case SUM:
-                if(results.size()==0){
-                    result += operando2;
-                    results.add(result);
+        for (int i = 0; i < expresion.length(); i++) {
+            if (expresion.charAt(i) >= '0' && expresion.charAt(i) <= '9') {
+                if(operando.equals("")){
+                    numStringA += expresion.charAt(i);
                 }else{
-                    if(!operationButtonPressed){
-                        result = results.get(results.size()-1) + operando2;
-                        results.add(result);
-                    }
-
+                    numStringB += expresion.charAt(i);
                 }
-
-                break;
+            }else{
+                operando = operation.getSymbol();
+            }
         }
 
-        secondaryDisplay.setText(String.valueOf(results.get(resultToShow)));
-        operationButtonPressed = false;
+        if(!operando.equals("")){
+            a = Double.parseDouble(numStringA);
+            b = Double.parseDouble(numStringB);
+
+            switch (operando) {
+                case "+":
+                    result = (a + b);
+                    break;
+                case "-":
+                    result = (a - b);
+                    break;
+                case "/":
+                    if(b!=0){
+                        result = (a / b);
+                    }
+                    break;
+                case "%":
+                    result = (a % b);
+                    break;
+                case "*":
+                    result = (a * b);
+                    break;
+            }
+            secondaryDisplay.setText(String.valueOf(result));
+        }
 
     }
-
 
 }
