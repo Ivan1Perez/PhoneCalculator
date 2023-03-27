@@ -179,32 +179,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         double a = 0, b = 0;
         int operandoCounter = 0;
         boolean resultUpdated = false;
-        int i = 0;
+        double lastOperation = 0;
 
-        while (i < expresion.length()) {
-            if (expresion.charAt(i) >= '0' && expresion.charAt(i) <= '9') {
+        for(int i = 0; i < expresion.length(); i++){
+            if(expresion.charAt(i)>='0' && expresion.charAt(i)<='0'){
                 if(operando.equals("")){
-                    numStringA += expresion.charAt(i);
+                    numStringA+=expresion.charAt(i);
                 }else{
-                    numStringB += expresion.charAt(i);
+                    numStringB+=expresion.charAt(i);
                 }
             }else{
-                operando = operation.getSymbol();
+                operando=operation.getSymbol();
             }
-
-            if(!operando.equals("")){
-                if (numStringB.equals("")) {
-                    i++;
-                    continue;
-                }
-
-                a = Double.parseDouble(numStringA);
-                b = Double.parseDouble(numStringB);
-
-                operation(operando, a, b);
-            }
-            i++;
         }
+
 
     }
 
@@ -228,6 +216,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 result = (a * b);
                 break;
         }
+
     }
 
 }
