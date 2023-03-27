@@ -181,35 +181,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         boolean resultUpdated = false;
         int i = 0;
 
-        if(result!=0){
-            a = Double.parseDouble(secondaryDisplay.getText().toString());
-            b = Double.parseDouble(expresion.substring(expresion.lastIndexOf(operation.getSymbol())));
-            operation(operation.getSymbol(), a , b);
-        }else{
-            while (i < expresion.length()) {
-                if (expresion.charAt(i) >= '0' && expresion.charAt(i) <= '9') {
-                    if(operando.equals("")){
-                        numStringA += expresion.charAt(i);
-                    }else{
-                        numStringB += expresion.charAt(i);
-                    }
+        while (i < expresion.length()) {
+            if (expresion.charAt(i) >= '0' && expresion.charAt(i) <= '9') {
+                if(operando.equals("")){
+                    numStringA += expresion.charAt(i);
                 }else{
-                    operando = operation.getSymbol();
+                    numStringB += expresion.charAt(i);
                 }
-
-                if(!operando.equals("")){
-                    if (numStringB.equals("")) {
-                        i++;
-                        continue;
-                    }
-
-                    a = Double.parseDouble(numStringA);
-                    b = Double.parseDouble(numStringB);
-
-                    operation(operando, a, b);
-                }
-                i++;
+            }else{
+                operando = operation.getSymbol();
             }
+
+            if(!operando.equals("")){
+                if (numStringB.equals("")) {
+                    i++;
+                    continue;
+                }
+
+                a = Double.parseDouble(numStringA);
+                b = Double.parseDouble(numStringB);
+
+                operation(operando, a, b);
+            }
+            i++;
         }
 
     }
