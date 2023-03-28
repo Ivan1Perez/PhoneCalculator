@@ -25,6 +25,9 @@
                 android:id="@+id/display"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
                 android:layout_weight="0"
                 android:hint="Calculator"
                 android:text=""
@@ -35,8 +38,11 @@
                 android:id="@+id/secondaryDisplay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
                 android:layout_weight="0"
-                android:text="" />
+                android:text=""
+                android:textSize="20sp"
+                android:textColor="#C68C8585"/>
 
         </LinearLayout>
 

@@ -26,16 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button buttonSum;
     private Button buttonEqual;
     private Operation operation;
-    private double operando1;
-    private double operando2;
     private double result;
-    private boolean equalPressed;
-    private boolean operationDone;
-    private double previousResult;
-    private boolean firstCalculation;
-    private List<Float> results;
-    private boolean operationButtonPressed;
-    private int totalOperadores;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +42,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonSubtract = findViewById(R.id.buttonSubtract);
         buttonSum = findViewById(R.id.buttonPlus);
         buttonEqual = findViewById(R.id.buttonEqual);
-        equalPressed = false;
-        results = new ArrayList<>();
-        operationButtonPressed = false;
-        totalOperadores = 0;
 
         inicializar();
 
@@ -73,12 +60,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @SuppressLint("SetTextI18n")
     private void inicializar() {
 
-//        buttonAC.setOnClickListener(view -> {
-//            display.setText(null);
-//            secondaryDisplay.setText("");
-//            result = 0;
-//            previousResult = 0;
-//        });
+        buttonAC.setOnClickListener(view -> {
+            display.setText(null);
+            secondaryDisplay.setText("");
+            result = 0;
+            operation = null;
+        });
 //
 //        buttonDelete.setOnClickListener(view -> {
 //            CharSequence text = display.getText();
@@ -103,12 +90,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     display.setText(display.getText() + ((Button) view).getText().toString());
 
             operation = Operation.SUM;
-            operationButtonPressed = true;
         });
 
         buttonEqual.setOnClickListener(view -> {
-            display.setText("");
-            equalPressed = true;
+            display.setText(secondaryDisplay.getText().toString());
+            secondaryDisplay.setText("");
             operation = null;
         });
 
@@ -118,12 +104,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @SuppressLint("SetTextI18n")
     @Override
     public void onClick(View view) {
+        String displayText = display.getText().toString();
 
-        if (display.getText().equals("0")) {
+        if (displayText.equals("0")) {
             startsWithZero(view);
-        } else if (display.getText().toString().contains(".")) {
+        } else if (displayText.contains(".")) {
             containsDot(view);
-        } else
+        }else
             display.setText(String.valueOf(display.getText()) + ((Button) view).getText());
 
         if (operation != null) {
@@ -153,39 +140,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @SuppressLint("SetTextI18n")
-    public void getOperando1() {
-        String displayText = display.getText().toString();
-
-        if (!displayText.equals("."))
-            operando1 = Float.parseFloat(displayText.substring(0, displayText.indexOf(operation.getSymbol())));
-    }
-
-    @SuppressLint("SetTextI18n")
-    public void getOperando2() {
-        String displayText = display.getText().toString();
-
-        try {
-            operando2 = Float.parseFloat(displayText.substring(displayText.lastIndexOf(operation.getSymbol())));
-        } catch (Exception e) {
-            operando2 = 0;
-        }
-    }
-
-    @SuppressLint("SetTextI18n")
     public void calculate() {
         String expresion = display.getText().toString();
-        char character = ' ';
         String operando = "";
-        String numStringA = "", numStringB = "";
-        boolean operatorACompleted = false;
         double a = 0, b = 0;
         int operandoCounter = 0;
-        boolean resultUpdated = false;
-        double lastOperationResutl = 0;
         List<String> listaOperandos = new ArrayList<>();
         List<Integer> listaPosicionesOperandos = new ArrayList<>();
-        List<Double> listaResultados = new ArrayList<>();
-        int bPosicion1 = 0, bPosicion2 = 0;
 
         for(int i = 0 ; i < expresion.length() ; i++){
             if(expresion.charAt(i)<'0' || expresion.charAt(i)>'9'){
@@ -210,17 +171,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     a = result;
 
                     try{
-                        b = Double.parseDouble(expresion.substring(listaPosicionesOperandos.get(j+1), listaPosicionesOperandos.get(j+2)));
-                    }catch (Exception e){
-                        try{
-                            b = Double.parseDouble(expresion.substring(listaPosicionesOperandos.get(j), listaPosicionesOperandos.get(j+1)));
-                        }catch (Exception e1){
-                            b = Double.parseDouble(expresion.substring(listaPosicionesOperandos.get(listaPosicionesOperandos.size()-1)));
-                        }
+                        b = Double.parseDouble(expresion.substring(listaPosicionesOperandos.get(j), listaPosicionesOperandos.get(j+1)));
+                    }catch (Exception e1){
+                        b = Double.parseDouble(expresion.substring(listaPosicionesOperandos.get(listaPosicionesOperandos.size()-1)));
                     }
                 }
                 performOperation(operando, a , b);
-                listaResultados.add(result);
             }
         }
 
