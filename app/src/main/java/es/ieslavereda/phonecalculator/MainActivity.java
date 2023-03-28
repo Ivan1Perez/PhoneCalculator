@@ -9,7 +9,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -179,24 +181,52 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         double a = 0, b = 0;
         int operandoCounter = 0;
         boolean resultUpdated = false;
-        double lastOperation = 0;
+        double lastOperationResutl = 0;
+        List<String> listaOperandos = new ArrayList<>();
+        List<Integer> listaPosicionesOperandos = new ArrayList<>();
+        List<Double> listaResultados = new ArrayList<>();
+        int bPosicion1 = 0, bPosicion2 = 0;
 
-        for(int i = 0; i < expresion.length(); i++){
-            if(expresion.charAt(i)>='0' && expresion.charAt(i)<='0'){
-                if(operando.equals("")){
-                    numStringA+=expresion.charAt(i);
-                }else{
-                    numStringB+=expresion.charAt(i);
-                }
-            }else{
-                operando=operation.getSymbol();
+        for(int i = 0 ; i < expresion.length() ; i++){
+            if(expresion.charAt(i)<'0' || expresion.charAt(i)>'9'){
+                listaOperandos.add(operation.getSymbol());
+                listaPosicionesOperandos.add(i);
+                operandoCounter++;
             }
         }
 
+        if(operandoCounter==1){
+            operando = listaOperandos.get(0);
+            a = Double.parseDouble(expresion.substring(0, expresion.indexOf(operando)));
+            b = Double.parseDouble(expresion.substring(expresion.indexOf(operando)));
+            performOperation(operando, a , b);
+        }else{
+            for(int i = 1, j = 0 ; i <= operandoCounter ; i++, j++){
+                operando = listaOperandos.get(j);
+                if(i==1){
+                    a = Double.parseDouble(expresion.substring(0, expresion.indexOf(operando)));
+                    b = Double.parseDouble(expresion.substring(listaPosicionesOperandos.get(0), listaPosicionesOperandos.get(1)));
+                }else{
+                    a = result;
+
+                    try{
+                        b = Double.parseDouble(expresion.substring(listaPosicionesOperandos.get(j+1), listaPosicionesOperandos.get(j+2)));
+                    }catch (Exception e){
+                        try{
+                            b = Double.parseDouble(expresion.substring(listaPosicionesOperandos.get(j), listaPosicionesOperandos.get(j+1)));
+                        }catch (Exception e1){
+                            b = Double.parseDouble(expresion.substring(listaPosicionesOperandos.get(listaPosicionesOperandos.size()-1)));
+                        }
+                    }
+                }
+                performOperation(operando, a , b);
+                listaResultados.add(result);
+            }
+        }
 
     }
 
-    private void operation(String operando, double a, double b) {
+    private void performOperation(String operando, double a, double b) {
         switch (operando) {
             case "+":
                 result = (a + b);
