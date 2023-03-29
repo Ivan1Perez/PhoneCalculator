@@ -10,8 +10,8 @@ import java.util.Map;
  enum Operation {
 
      PERCENTAGE("%"),
-     DIVISION("/"),
-     MULTIPLY("*"),
+     DIVISION("÷"),
+     MULTIPLY("×"),
      SUBTRACT("-"),
      SUM("+");
 
