@@ -4,10 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -171,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         buttonEqual.setOnClickListener(view -> {
+
             percetageToCalculate();
 
             if(!secondaryDisplay.getText().toString().equals("")){
@@ -231,7 +235,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             calculate();
             secondaryDisplay.setText(String.valueOf(result));
         }
-
     }
 
     @SuppressLint("SetTextI18n")
