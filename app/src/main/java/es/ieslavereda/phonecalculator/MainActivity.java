@@ -1,24 +1,20 @@
 package es.ieslavereda.phonecalculator;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.HorizontalScrollView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -41,7 +37,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RadioButton radioButtonResta;
     private RadioButton radioButtonMult;
     private RadioButton radioButtonDividir;
+    private String displayText;
+    private String secondaryDisplayText;
 
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if(!display.getText().equals("")){
+            displayText = display.getText().toString();
+            secondaryDisplayText = secondaryDisplay.getText().toString();
+
+        }
+
+        outState.putSerializable("result", result);
+        outState.putSerializable("displayText", displayText);
+        outState.putSerializable("secondaryDisplayText", secondaryDisplayText);
+
+
+
+//        outState.putSerializable("hacerOperacion",hacerOperacion);
+//        outState.putSerializable("a",a);
+//        outState.putSerializable("b",b);
+//        outState.putSerializable("borrar",borrar);
+//        outState.putSerializable("hayComa", hayComa);
+//        outState.putSerializable("operacion",operacion);
+//        outState.putSerializable("texto",  text.getText().toString());
+
+    }
+
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +91,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         radioButtonDividir = findViewById(R.id.radioButtonDividir);
         radioButtonMult = findViewById(R.id.radioButtonMultiplicar);
 
+        if (savedInstanceState==null) {
+            result = 0;
+            displayText = "";
+            secondaryDisplayText = "";
+        }else {
+            result = (double) savedInstanceState.get("result");
+            displayText = (String) savedInstanceState.get("displayText");
+            display.setText(displayText);
+            secondaryDisplayText = (String) savedInstanceState.get("secondaryDisplayText");
+            secondaryDisplay.setText(secondaryDisplayText);
+        }
+
         inicializar();
 
         // Oculta la barra de navegación
@@ -81,13 +119,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                radioGroup.clearCheck();
+
                 if (b) {
                     radioGroup.setVisibility(View.VISIBLE);
                     checkBox.setText("Ocultar opciones");
                 }
                 else {
                     radioGroup.setVisibility(View.GONE);
-                    radioGroup.clearCheck();
                     checkBox.setText("Mostrar opciones");
                 }
             }
@@ -98,10 +137,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void inicializar() {
 
         buttonAC.setOnClickListener(view -> {
-            display.setText(null);
+            display.setText("");
             secondaryDisplay.setText("");
+            displayText = "";
+            secondaryDisplayText = "";
             result = 0;
             operation = null;
+            radioGroup.clearCheck();
         });
 
         buttonDelete.setOnClickListener(view -> {
@@ -113,7 +155,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }else{
                 display.setText(null);
                 secondaryDisplay.setText(null);
+                displayText = "";
+                secondaryDisplayText = "";
                 operation = null;
+                radioGroup.clearCheck();
             }
 
 
@@ -121,6 +166,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         buttonSum.setOnClickListener(view -> {
             equalButtonPressed = false;
+            radioButtonSuma.setChecked(true);
 
             arrangeText("+", Operation.SUM);
         });
@@ -133,6 +179,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         buttonSubtract.setOnClickListener(view -> {
             equalButtonPressed = false;
+            radioButtonResta.setChecked(true);
 
             arrangeText("-", Operation.SUBTRACT);
         });
@@ -174,8 +221,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         buttonEqual.setOnClickListener(view -> {
+            radioGroup.clearCheck();
 
-            percetageToCalculate();
+            percentageToCalculate();
 
             if(!secondaryDisplay.getText().toString().equals("")){
                 display.setText(secondaryDisplay.getText().toString());
@@ -189,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void percetageToCalculate() {
+    private void percentageToCalculate() {
         double operando;
         if(display.getText().toString().charAt(display.getText().length()-1)=='%'){
             if(onlyNumbers()){
@@ -217,7 +265,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @SuppressLint("SetTextI18n")
     @Override
     public void onClick(View view) {
-        String displayText = display.getText().toString();
+        displayText = display.getText().toString();
+        String resultToShow = "";
 
         if(equalButtonPressed){
             display.setText("");
@@ -233,7 +282,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (operation != null && display.getText().toString().charAt(display.getText().length()-1)!='.') {
             calculate();
-            secondaryDisplay.setText(String.valueOf(result));
+            resultToShow = String.valueOf(result);
+            if(resultToShow.endsWith(".0")){
+                resultToShow = resultToShow.replace(".0", "");
+            }
+            secondaryDisplay.setText(resultToShow);
         }
     }
 
@@ -328,7 +381,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public boolean onlyNumbers(){
-        String displayText = display.getText().toString();
+        displayText = display.getText().toString();
 
         for(int i = 0; i < displayText.length()-1; i++){
             if((displayText.charAt(i)<'0' || displayText.charAt(i)>'9') && displayText.charAt(i)!='.'){
